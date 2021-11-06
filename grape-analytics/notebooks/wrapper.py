@@ -43,7 +43,9 @@ def reqparse(response: list or dict, request: list):
                 #key = ['account', 'lamports']
                 name = key[0]
                 sub = key[1]
-                selected[sub] = resp[name][sub]
+                sub2 = key[2]
+                sub3 = key[3]
+                selected[sub3] = resp[name][sub][sub2][sub3]
                 continue
                 
             selected[key] = resp[key]
