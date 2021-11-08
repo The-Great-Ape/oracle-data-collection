@@ -54,7 +54,6 @@ def bal_info(df):
     length = len(df["lamports"].values)
     for i in range(length):
         num = num + df["lamports"].values[i]
-
     lamports_avg = round(num / length)
     lamports_median = round(median(df["lamports"].values))
     lamports_mode = round(mode(df["lamports"].values))
@@ -94,8 +93,8 @@ def analyze(csvs):
         analytics_df = pd.DataFrame.from_dict(analytics_dict)
         analytics_df = analytics_df.set_index("community")
         result = [populated_df, analytics_df]
-
         results[key] = result
+
     return results
 
 
@@ -106,15 +105,25 @@ def grapescores(csvs):
         nftnum = df["nfts_total"].values[0]
         while True:
             print("For community: ", key)
+
             holders = input("Number Of Holders: ")
-            supply = input("Number of NFT Supply: ")
             try:
-                int(supply + holders)
+                int(holders)
                 break
             except:
+                print("Invalid entry. Passing NaN.")
                 holders = math.nan
+                break
+
+            supply = input("Number of NFT Supply: ")
+            try:
+                int(supply)
+                break
+            except:
+                print("Invalid entry. Passing NaN.")
                 supply = math.nan
                 break
+
         user_gscore = float(users) / float(holders)
         nft_gscore = float(nftnum) / float(supply)
 
@@ -167,15 +176,10 @@ def leaderboard(csvs):
     ]
 
 
-# OLD - REVISE
-def csvsave(array):
-    for arr in array:
-        folder = arr.split("_")[0]
-        files = arr.split(", ")
-        for file in files:
-            toexec = file + ".to_csv('metrics/" + folder + "/" + file + ".csv')"
-            print(toexec)
-            exec(toexec)
+def leaderboard_save(csvs):
+    for csv in csvs:
+        filename = "../metrics/leaderboards/" + csv.index.values[0] + ".csv"
+        csv.to_csv(filename)
 
 
 # Replace names correspondingly
@@ -193,7 +197,8 @@ def run():
     ]
     csvs_preanalysis = csvdict(paths)
     csvs_postanalysis = analyze(csvs_preanalysis)
+    grapescores(csvs_postanalysis)
     csvs_leaderboard = leaderboard(csvs_postanalysis)
-
+    leaderboard_save(csvs_leaderboard)
     # revise csvsave
     # csvsave(csvs_leaderboard)
