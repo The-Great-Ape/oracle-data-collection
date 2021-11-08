@@ -67,7 +67,7 @@ def bal_info(df):
 def analyze(csvs):
     results = {}
     for key in list(csvs.keys()):
-        df = csvdict[key]
+        df = csvs[key]
         date = pd.to_datetime("today").strftime("%Y/%m/%d")
         no_lamports = preformat(df)
         populated_df = add_lamports(no_lamports)
